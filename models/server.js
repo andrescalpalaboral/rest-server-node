@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { environmentVariables } = require("../config");
+const { dbMongoConnection } = require("../database/config");
 
 class Server {
   constructor() {
@@ -8,8 +9,13 @@ class Server {
     this.port = environmentVariables.port;
     this.usersPath = "/api/users";
 
+    this.connectMongoDB();
     this.middleware();
     this.routes();
+  }
+
+  async connectMongoDB() {
+    await dbMongoConnection();
   }
 
   middleware() {

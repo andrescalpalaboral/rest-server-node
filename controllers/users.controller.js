@@ -1,4 +1,6 @@
 const { response } = require("express");
+const bcryptjs = require("bcryptjs");
+const UserSchema = require("../models/user");
 
 const getUser = (req, res) => {
   const { id } = req.params;
@@ -8,17 +10,20 @@ const getUser = (req, res) => {
   });
 };
 
-const postUser = (req, res = response) => {
-  const { group, city } = req.query;
-  const { firstName, lastName, age } = req.body;
-  res.status(201).json({
-    msg: "POST from controller",
+const createUser = async (req, res = response) => {
+  const { firstName, lastName, email, password, role } = req.body;
+
+  const salt = await bcryptjs.genSaltSync();
+  const encryptPass = bcryptjs.hashSync(password, salt);
+  const newUser = new UserSchema({
     firstName,
     lastName,
-    age,
-    group,
-    city,
+    email,
+    password: encryptPass,
+    role,
   });
+  const userCreated = await newUser.save();
+  res.status(201).json(userCreated);
 };
 
 const putUsers = (req, res = response) => {
@@ -39,4 +44,4 @@ const deleteUser = (req, res = response) => {
   });
 };
 
-module.exports = { getUser, postUser, putUsers, patchUser, deleteUser };
+module.exports = { getUser, createUser, putUsers, patchUser, deleteUser };

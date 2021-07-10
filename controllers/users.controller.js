@@ -52,8 +52,15 @@ const patchUser = (req, res = response) => {
 
 const deleteUser = async (req, res = response) => {
   const { id } = req.params;
-  const userDeleted = await UserSchema.findByIdAndUpdate(id, { status: false });
-  res.status(200).json(userDeleted);
+  const uid = req.uid;
+  const userDeleted = await UserSchema.findByIdAndUpdate(
+    id,
+    { status: false },
+    {
+      new: true,
+    }
+  );
+  res.status(200).json({ userDeleted, uid });
 };
 
 module.exports = {

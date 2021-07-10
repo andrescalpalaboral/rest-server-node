@@ -11,8 +11,15 @@ const {
   validateRoleDB,
   emailsAlreadyExists,
   userAlreadyExists,
+  userIsActive,
 } = require("../helpers/validators");
-const { validateFields } = require("../middlewares/validateFields");
+const {
+  validateIfContainsRole,
+  validateJWT,
+  validateFields,
+} = require("../middlewares");
+
+const ALLOWED_ROLES = ["ADMIN_ROLE", "TEST_ROLE", "USER_ROLE"];
 
 const router = Router();
 
@@ -48,8 +55,10 @@ router.patch("/", patchUser);
 router.delete(
   "/:id",
   [
+    validateJWT,
+    validateIfContainsRole(ALLOWED_ROLES),
     check("id", "Invalid mongo ID").isMongoId(),
-    check("id").custom(userAlreadyExists),
+    check("id").custom(userIsActive),
     validateFields,
   ],
   deleteUser

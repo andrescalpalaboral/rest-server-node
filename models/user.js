@@ -24,6 +24,7 @@ const UserSchema = Schema({
     type: String,
     required: [true, "Role value is required"],
     enum: ["ADMIN_ROLE", "USER_ROLE"],
+    default: "USER_ROLE",
   },
   isGoogleLogin: {
     type: Boolean,

@@ -11,6 +11,7 @@
   </head>
 
   <body>
+    <!-- This section is to generate google token an can use backend service locally-->
     <h1>Sign-In</h1>
     <div class="g-signin2" data-onsuccess="onSignIn"></div>
     <a href="#" onclick="signOut();">Sign out</a>
@@ -18,7 +19,7 @@
     <script>
       const url = (window.location.hostname.includes("localhost"))
         ? "http://localhost:7777/api/auth/google"
-        : "https://rest-server-node-ac7.herokuapp.com/api/auth/google";
+        : "http://localhost:7777/api/auth/google";
       function onSignIn(googleUser) {
         var profile = googleUser.getBasicProfile();
         console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
